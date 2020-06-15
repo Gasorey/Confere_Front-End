@@ -16,6 +16,19 @@ interface IPayment {
   updated_at: Date;
 }
 
+interface ICreateTransactions {
+  card: {
+    number: string;
+    expiry: Date;
+    cvv: string;
+    holder: string;
+  };
+  value: number;
+  description: string;
+  type: 'debit' | 'credit' | 'installment_credit';
+  installment?: number;
+}
+
 const Dashboard: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -67,6 +80,15 @@ const Dashboard: React.FC = () => {
     setPayments(newPayment);
   }
 
+  async function handleCreateTransaction(
+    data: ICreateTransactions,
+  ): Promise<void> {
+    const { id } = transactionPayment;
+    console.log(id);
+    console.log(data);
+    await api.post(`/transaction/${id}`, data);
+  }
+
   async function handleDeletePayment(id: string): Promise<void> {
     await api.delete(`/payment/${id}`);
 
@@ -107,12 +129,12 @@ const Dashboard: React.FC = () => {
       <ModalEditPayment
         isOpen={editModalOpen}
         setIsOpen={toggleEditModal}
-        handleEditPayment={handleEditPayment}
+        handleEditPayment={handleUpdatePayment}
       />
       <ModalTransactionToPayment
         isOpen={transactionModalOpen}
         setIsOpen={toggleTransactionModal}
-        handleAddPayment={handleAddPayment}
+        handleCreateTransaction={handleCreateTransaction}
       />
 
       <PaymentContainer data-testid="payments-list">

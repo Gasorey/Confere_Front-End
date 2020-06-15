@@ -43,11 +43,16 @@ const ModalEditPayment: React.FC<IModalProps> = ({
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Form ref={formRef} onSubmit={handleSubmit}>
-        <h1>Novo Pagamento</h1>
-        <Input name="description" placeholder="Descrição do seu pagamento" />
+        <h1>Atualize o status do seu pagamento</h1>
+        <h2>As opções são:</h2>
+        <ul>
+          <li>Aguardando Pagamento</li>
+          <li>Pagamento Efetuado</li>
+          <li>Recebido</li>
+        </ul>
         <Input name="status" placeholder="Qual o status do pagamento" />
         <button type="submit" data-testid="add-payment">
-          <p className="text">Adicionar novo pagamento</p>
+          <p className="text">Atualizar pagamento</p>
           <div className="icon">
             <FiCheckCircle size={20} />
           </div>

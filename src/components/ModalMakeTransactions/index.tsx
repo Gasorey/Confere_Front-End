@@ -14,40 +14,64 @@ interface IPayment {
   updated_at: Date;
 }
 
-interface ICreatePayment {
+interface ICreateTransactions {
+  card: {
+    number: string;
+    expiry: Date;
+    cvv: string;
+    holder: string;
+  };
+  value: number;
   description: string;
-  status: string;
+  type: 'debit' | 'credit' | 'installment_credit';
+  installment?: number;
 }
 
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  handleAddPayment: (
-    payment: Omit<IPayment, 'id' | 'user_id' | 'created_at' | 'updated_at'>,
-  ) => void;
+  handleCreateTransaction: (data: ICreateTransactions) => void;
 }
 
 const ModalMakeTransactionToPayment: React.FC<IModalProps> = ({
   isOpen,
   setIsOpen,
-  handleAddPayment,
+  handleCreateTransaction,
 }) => {
   const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(
-    async (data: ICreatePayment) => {
-      handleAddPayment(data);
+    async (data: ICreateTransactions) => {
+      console.log(data);
+      handleCreateTransaction(data);
 
       setIsOpen();
     },
-    [handleAddPayment, setIsOpen],
+    [handleCreateTransaction, setIsOpen],
   );
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Form ref={formRef} onSubmit={handleSubmit}>
-        <h1>Novo Pagamento</h1>
-        <Input name="description" placeholder="Descrição do seu pagamento" />
-        <Input name="status" placeholder="Qual o status do pagamento" />
+        <h1>Transação para esse pagamento</h1>
+        <h2>Card:</h2>
+        <Input name="number" placeholder="Número do cartão" />
+        <Input type="Date" name="expiry" placeholder="Validade" />
+        <Input type="text" name="cvv" placeholder="cvv" />
+        <Input type="text" name="holder" placeholder="Nome no cartão" />
+        <h2>Transação:</h2>
+        <Input type="number" name="value" placeholder="Valor da transação" />
+        <Input
+          type="text"
+          name="descrição"
+          placeholder="Descrição da transação"
+        />
+        <Input type="text" name="type" placeholder="Tipo de Transação" />
+        <Input
+          type="number"
+          name="installments"
+          placeholder="Quantidade de parcelas"
+        />
+
         <button type="submit" data-testid="add-payment">
           <p className="text">Adicionar novo pagamento</p>
           <div className="icon">
