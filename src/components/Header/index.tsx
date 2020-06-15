@@ -1,37 +1,30 @@
 import React from 'react';
 
-import { NavLink } from 'react-router-dom';
 import {} from 'polished';
+import { FiPlusSquare } from 'react-icons/fi';
 import { Container } from './styles';
 
-interface HeaderProps {
-  size?: 'small' | 'large';
+interface IHeaderProps {
+  openModal?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ size = 'large' }) => (
-  <Container size={size}>
+const Header: React.FC<IHeaderProps> = ({ openModal }) => (
+  <Container>
     <header>
       <nav>
-        <NavLink
-          activeStyle={{
-            borderBottom: 'solid',
-            borderBottomColor: '#187dc9',
-            paddingBottom: '5px',
-          }}
-          to="/"
-        >
-          Novo pagamento
-        </NavLink>
-        <NavLink
-          activeStyle={{
-            borderBottom: 'solid',
-            borderBottomColor: '#187dc9',
-            paddingBottom: '5px',
-          }}
-          to="/"
-        >
-          Novo pagamento
-        </NavLink>
+        <div>
+          <button
+            type="button"
+            // onClick={() => {
+            //   openModal();
+            // }}
+          >
+            <div className="text">Novo Pagamento</div>
+            <div className="icon">
+              <FiPlusSquare size={20} />
+            </div>
+          </button>
+        </div>
       </nav>
     </header>
   </Container>
