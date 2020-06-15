@@ -3,14 +3,20 @@ import styled, { css } from 'styled-components';
 export const Container = styled.div`
   background: #f0f0f5;
   border-radius: 8px;
+  position: relative;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px 0 rgba(192, 208, 230, 0.8);
+  border-top: 20px solid rgba(230, 236, 245, 0.4);
+  cursor: grab;
 
   header {
     background: #ffb84d;
     border-radius: 8px 8px 0px 0px;
-    height: 192px;
+    height: 120px;
     overflow: hidden;
     transition: 0.3 opacity;
     text-align: center;
+    position: absolute;
   }
 
   section.body {

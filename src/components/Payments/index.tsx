@@ -39,7 +39,6 @@ const Payment: React.FC<IProps> = ({
   function setTransactionPayment(): void {
     handleTransactionPayment(payment);
   }
-
   const formatedDate = format(
     parseISO(String(payment.created_at)),
     'dd-MM-yyyy',
@@ -47,6 +46,7 @@ const Payment: React.FC<IProps> = ({
       locale: ptBR,
     },
   );
+
   return (
     <Container>
       <section className="body">

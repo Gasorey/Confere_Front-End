@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiPower } from 'react-icons/fi';
 import Header from '../../components/Header';
+import Board from '../../components/Board';
 import api from '../../services/api';
 import ModalAddPayment from '../../components/ModalAddPayments';
 import ModalEditPayment from '../../components/ModalMakeUpdates';
@@ -8,6 +9,7 @@ import ModalTransactionToPayment from '../../components/ModalMakeTransactions';
 import Payment from '../../components/Payments';
 import { PaymentContainer } from './styles';
 import { useAuth } from '../../context/AuthContext';
+import List from '../../components/List';
 
 interface IPayment {
   id: string;
@@ -163,19 +165,22 @@ const Dashboard: React.FC = () => {
         setIsOpen={toggleTransactionModal}
         handleCreateTransaction={handleCreateTransaction}
       />
-
-      <PaymentContainer data-testid="payments-list">
-        {payments &&
-          payments.map((payment) => (
-            <Payment
-              key={payment.id}
-              payment={payment}
-              handleTransactionPayment={handleTransactionPayment}
-              handleDelete={handleDeletePayment}
-              handleEditPayment={handleEditPayment}
-            />
-          ))}
-      </PaymentContainer>
+      <Board>
+        <List>
+          <PaymentContainer data-testid="payments-list">
+            {payments &&
+              payments.map((payment) => (
+                <Payment
+                  key={payment.id}
+                  payment={payment}
+                  handleTransactionPayment={handleTransactionPayment}
+                  handleDelete={handleDeletePayment}
+                  handleEditPayment={handleEditPayment}
+                />
+              ))}
+          </PaymentContainer>
+        </List>
+      </Board>
     </>
   );
 };
