@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiCreditCard } from 'react-icons/fi';
 import { Container } from './styles';
 
 interface IPayment {
@@ -20,15 +20,20 @@ interface IProps {
   payment: IPayment;
   handleDelete: (id: string) => {};
   handleEditPayment: (payment: IPayment) => void;
+  handleTransactionPayment: (payment: IPayment) => void;
 }
 
 const Payment: React.FC<IProps> = ({
   payment,
   handleDelete,
   handleEditPayment,
+  handleTransactionPayment,
 }: IProps) => {
   function setEditingPayment(): void {
     handleEditPayment(payment);
+  }
+  function setTransactionPayment(): void {
+    handleTransactionPayment(payment);
   }
   return (
     <Container>
@@ -45,11 +50,20 @@ const Payment: React.FC<IProps> = ({
           <button
             type="button"
             className="icon"
+            onClick={() => setTransactionPayment()}
+            data-testid={`transaction-payment-${payment.id}`}
+          >
+            <FiCreditCard size={20} />
+          </button>
+          <button
+            type="button"
+            className="icon"
             onClick={() => setEditingPayment()}
             data-testid={`edit-payment-${payment.id}`}
           >
             <FiEdit2 size={20} />
           </button>
+
           <button
             type="button"
             className="icon"

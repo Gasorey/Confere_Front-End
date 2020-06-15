@@ -29,4 +29,33 @@ export const Container = styled.div`
       margin-bottom: 8px;
     }
   }
+  section.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 30px;
+    background: #e4e4eb;
+    border-radius: 0px 0px 8px 8px;
+
+    div.icon-containter {
+      display: flex;
+    }
+
+    button {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      transition: 0.2s;
+
+      svg {
+        color: #3d3d4d;
+      }
+
+      & + button {
+        margin-left: 6px;
+      }
+    }
+  }
 `;

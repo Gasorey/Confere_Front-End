@@ -22,25 +22,23 @@ interface ICreatePayment {
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  handleAddPayment: (
-    payment: Omit<IPayment, 'id' | 'user_id' | 'created_at' | 'updated_at'>,
-  ) => void;
+  handleEditPayment: (payment: IPayment) => void;
 }
 
-const ModalMakeTransactionToPayment: React.FC<IModalProps> = ({
+const ModalEditPayment: React.FC<IModalProps> = ({
   isOpen,
   setIsOpen,
-  handleAddPayment,
+  handleEditPayment,
 }) => {
   const formRef = useRef<FormHandles>(null);
 
   const handleSubmit = useCallback(
-    async (data: ICreatePayment) => {
-      handleAddPayment(data);
+    async (data: IPayment) => {
+      handleEditPayment(data);
 
       setIsOpen();
     },
-    [handleAddPayment, setIsOpen],
+    [handleEditPayment, setIsOpen],
   );
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
@@ -58,4 +56,4 @@ const ModalMakeTransactionToPayment: React.FC<IModalProps> = ({
     </Modal>
   );
 };
-export default ModalMakeTransactionToPayment;
+export default ModalEditPayment;

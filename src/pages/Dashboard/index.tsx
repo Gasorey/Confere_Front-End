@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import api from '../../services/api';
 import ModalAddPayment from '../../components/ModalAddPayments';
+import ModalEditPayment from '../../components/ModalMakeUpdates';
+import ModalTransactionToPayment from '../../components/ModalMakeTransactions';
 import Payment from '../../components/Payments';
 import { PaymentContainer } from './styles';
 
@@ -16,10 +18,15 @@ interface IPayment {
 
 const Dashboard: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [transactionModalOpen, setTransactionModalOpen] = useState(false);
+
   const [editingPayment, setEditingPayment] = useState<IPayment>(
     {} as IPayment,
   );
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [transactionPayment, setTransactionPayment] = useState<IPayment>(
+    {} as IPayment,
+  );
   const [payments, setPayments] = useState<IPayment[]>([]);
 
   useEffect(() => {
@@ -45,9 +52,6 @@ const Dashboard: React.FC = () => {
       console.log(err);
     }
   }
-  function toggleModal(): void {
-    setModalOpen(!modalOpen);
-  }
 
   async function handleUpdatePayment(
     payment: Omit<IPayment, 'user_id' | 'created_at' | 'updated_at'>,
@@ -71,8 +75,20 @@ const Dashboard: React.FC = () => {
     setPayments(newPayments);
   }
 
+  function toggleModal(): void {
+    setModalOpen(!modalOpen);
+  }
+
   function toggleEditModal(): void {
     setEditModalOpen(!editModalOpen);
+  }
+  function toggleTransactionModal(): void {
+    setTransactionModalOpen(!transactionModalOpen);
+  }
+
+  function handleTransactionPayment(payment: IPayment): void {
+    setTransactionPayment(payment);
+    toggleTransactionModal();
   }
 
   function handleEditPayment(payment: IPayment): void {
@@ -88,6 +104,16 @@ const Dashboard: React.FC = () => {
         setIsOpen={toggleModal}
         handleAddPayment={handleAddPayment}
       />
+      <ModalEditPayment
+        isOpen={editModalOpen}
+        setIsOpen={toggleEditModal}
+        handleEditPayment={handleEditPayment}
+      />
+      <ModalTransactionToPayment
+        isOpen={transactionModalOpen}
+        setIsOpen={toggleTransactionModal}
+        handleAddPayment={handleAddPayment}
+      />
 
       <PaymentContainer data-testid="payments-list">
         {payments &&
@@ -95,6 +121,7 @@ const Dashboard: React.FC = () => {
             <Payment
               key={payment.id}
               payment={payment}
+              handleTransactionPayment={handleTransactionPayment}
               handleDelete={handleDeletePayment}
               handleEditPayment={handleEditPayment}
             />
