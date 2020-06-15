@@ -17,12 +17,15 @@ export const Content = styled.div`
 
   width: 100%;
   max-width: 700px;
-  margin-left: 50px;
-  margin-right: 50px;
-  h1 {
-    margin-top: 50px;
-    margin-bottom: 50px;
-    color: #312e38;
+
+  form {
+    margin: 80px 0;
+    width: 520px;
+    text-align: center;
+    h1 {
+      margin-bottom: 50px;
+      color: #312e38;
+    }
   }
 
   a {
