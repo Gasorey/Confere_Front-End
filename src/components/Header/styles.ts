@@ -12,14 +12,34 @@ export const Container = styled.div`
     align-items: center;
     justify-content: space-between;
 
+    div.login {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+
+      h1 {
+        margin-top: 8px;
+      }
+      h2 {
+      }
+    }
+
     nav {
+      margin-left: 60%;
       div {
+        max-width: 100%;
+        display: flex;
+        .power-button {
+          background: transparent;
+        }
         button {
           font-weight: 600;
           border-radius: 8px;
           border: 0;
-          background: #39b100;
+          background: transparent;
           color: #fff;
+          margin: 16px;
+          font-size: 24px;
 
           display: flex;
           flex-direction: row;
@@ -29,13 +49,7 @@ export const Container = styled.div`
           .text {
             padding: 16px 24px;
           }
-          .icon {
-            display: flex;
-            padding: 16px 16px;
-            background: #41c900;
-            border-radius: 0 8px 8px 0;
-            margin: 0 auto;
-          }
+
           &:hover {
             color: ${shade(0.2, '#39b100')};
           }

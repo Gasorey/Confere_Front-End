@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FiPower } from 'react-icons/fi';
 import Header from '../../components/Header';
 import api from '../../services/api';
 import ModalAddPayment from '../../components/ModalAddPayments';
@@ -21,19 +22,19 @@ interface ICreateTransactions {
   value: number;
   description: string;
   type: 'debit' | 'credit' | 'installment_credit' | string;
-  installment: undefined | number;
-  card: {
-    number: string;
-    expiry: Date;
-    cvv: string;
-    holder: string;
-  };
+  installment: number | undefined;
+  number: string;
+  expiry: Date;
+  cvv: string;
+  holder: string;
 }
 
 const Dashboard: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
+
+  const { signOut } = useAuth();
 
   const [editingPayment, setEditingPayment] = useState<IPayment>(
     {} as IPayment,
@@ -68,11 +69,10 @@ const Dashboard: React.FC = () => {
   }
 
   async function handleUpdatePayment(
-    payment: Omit<IPayment, 'user_id' | 'created_at' | 'updated_at'>,
+    payment: Omit<IPayment, 'created_at' | 'updated_at'>,
   ): Promise<void> {
     const updatedPayment = { ...editingPayment, ...payment };
 
-    console.log(editingPayment.id);
     await api.put(`/payment/${editingPayment.id}`, updatedPayment);
 
     const newPayment = payments.map((paymentItem) =>
@@ -82,19 +82,38 @@ const Dashboard: React.FC = () => {
     setPayments(newPayment);
   }
 
-  const { user } = useAuth();
-  console.log(user);
-
   async function handleCreateTransaction(
     data: ICreateTransactions,
   ): Promise<void> {
     const { id } = transactionPayment;
 
-    const { card, description, installment, type, value } = data;
+    const {
+      cvv,
+      expiry,
+      holder,
+      number,
+      description,
+      installment,
+      type,
+      value,
+    } = data;
 
-    const objeto = { transactionCard: card, data };
+    const transactionCard = {
+      number,
+      holder,
+      expiry,
+      cvv,
+    };
 
-    await api.post(`/transaction/${id}`, objeto);
+    const transaction = {
+      card: transactionCard,
+      value,
+      description,
+      installment,
+      type,
+    };
+
+    await api.post(`/transaction/${id}`, transaction);
   }
 
   async function handleDeletePayment(id: string): Promise<void> {

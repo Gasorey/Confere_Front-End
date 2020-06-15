@@ -19,12 +19,11 @@ interface ICreateTransactions {
   description: string;
   type: 'debit' | 'credit' | 'installment_credit' | string;
   installment: undefined | number;
-  card: {
-    number: string;
-    expiry: Date;
-    cvv: string;
-    holder: string;
-  };
+
+  number: string;
+  expiry: Date;
+  cvv: string;
+  holder: string;
 }
 
 interface IModalProps {
@@ -42,7 +41,6 @@ const ModalMakeTransactionToPayment: React.FC<IModalProps> = ({
 
   const handleSubmit = useCallback(
     async (data: ICreateTransactions) => {
-      console.log(data);
       handleCreateTransaction(data);
 
       setIsOpen();
@@ -68,7 +66,7 @@ const ModalMakeTransactionToPayment: React.FC<IModalProps> = ({
         <Input type="text" name="type" placeholder="Tipo de Transação" />
         <Input
           type="number"
-          name="installments"
+          name="installment"
           placeholder="Quantidade de parcelas"
         />
 
