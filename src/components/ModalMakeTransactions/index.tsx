@@ -15,16 +15,16 @@ interface IPayment {
 }
 
 interface ICreateTransactions {
+  value: number;
+  description: string;
+  type: 'debit' | 'credit' | 'installment_credit' | string;
+  installment: undefined | number;
   card: {
     number: string;
     expiry: Date;
     cvv: string;
     holder: string;
   };
-  value: number;
-  description: string;
-  type: 'debit' | 'credit' | 'installment_credit';
-  installment?: number;
 }
 
 interface IModalProps {
@@ -62,7 +62,7 @@ const ModalMakeTransactionToPayment: React.FC<IModalProps> = ({
         <Input type="number" name="value" placeholder="Valor da transação" />
         <Input
           type="text"
-          name="descrição"
+          name="description"
           placeholder="Descrição da transação"
         />
         <Input type="text" name="type" placeholder="Tipo de Transação" />

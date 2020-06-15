@@ -6,6 +6,7 @@ import ModalEditPayment from '../../components/ModalMakeUpdates';
 import ModalTransactionToPayment from '../../components/ModalMakeTransactions';
 import Payment from '../../components/Payments';
 import { PaymentContainer } from './styles';
+import { useAuth } from '../../context/AuthContext';
 
 interface IPayment {
   id: string;
@@ -17,16 +18,16 @@ interface IPayment {
 }
 
 interface ICreateTransactions {
+  value: number;
+  description: string;
+  type: 'debit' | 'credit' | 'installment_credit' | string;
+  installment: undefined | number;
   card: {
     number: string;
     expiry: Date;
     cvv: string;
     holder: string;
   };
-  value: number;
-  description: string;
-  type: 'debit' | 'credit' | 'installment_credit';
-  installment?: number;
 }
 
 const Dashboard: React.FC = () => {
@@ -71,6 +72,7 @@ const Dashboard: React.FC = () => {
   ): Promise<void> {
     const updatedPayment = { ...editingPayment, ...payment };
 
+    console.log(editingPayment.id);
     await api.put(`/payment/${editingPayment.id}`, updatedPayment);
 
     const newPayment = payments.map((paymentItem) =>
@@ -80,13 +82,19 @@ const Dashboard: React.FC = () => {
     setPayments(newPayment);
   }
 
+  const { user } = useAuth();
+  console.log(user);
+
   async function handleCreateTransaction(
     data: ICreateTransactions,
   ): Promise<void> {
     const { id } = transactionPayment;
-    console.log(id);
-    console.log(data);
-    await api.post(`/transaction/${id}`, data);
+
+    const { card, description, installment, type, value } = data;
+
+    const objeto = { transactionCard: card, data };
+
+    await api.post(`/transaction/${id}`, objeto);
   }
 
   async function handleDeletePayment(id: string): Promise<void> {
