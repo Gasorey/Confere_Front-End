@@ -7,7 +7,7 @@ export const Container = styled.div`
   header {
     width: 100%;
     margin: 0 auto;
-    padding: 0 20px 150px;
+    /* padding: 0 20px 150px; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -16,11 +16,13 @@ export const Container = styled.div`
       display: flex;
       align-items: flex-start;
       flex-direction: column;
-
+      margin-left: 24px;
       h1 {
+        margin-left: 24px;
         margin-top: 8px;
       }
       h2 {
+        margin-left: 24px;
       }
     }
 

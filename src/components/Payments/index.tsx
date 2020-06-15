@@ -1,5 +1,9 @@
 import React from 'react';
 import { FiEdit2, FiTrash2, FiCreditCard } from 'react-icons/fi';
+import { format, parseISO } from 'date-fns';
+// eslint-disable-next-line import/no-duplicates
+import { ptBR } from 'date-fns/locale';
+
 import { Container } from './styles';
 
 interface IPayment {
@@ -35,6 +39,14 @@ const Payment: React.FC<IProps> = ({
   function setTransactionPayment(): void {
     handleTransactionPayment(payment);
   }
+
+  const formatedDate = format(
+    parseISO(String(payment.created_at)),
+    'dd-MM-yyyy',
+    {
+      locale: ptBR,
+    },
+  );
   return (
     <Container>
       <section className="body">
@@ -43,7 +55,7 @@ const Payment: React.FC<IProps> = ({
         <h1>Status:</h1>
         <p>{payment.status}</p>
         <h1>Data de criação:</h1>
-        <p>{payment.created_at}</p>
+        <p>{formatedDate}</p>
       </section>
       <section className="footer">
         <div className="icon-container">
