@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FiPower } from 'react-icons/fi';
 import Header from '../../components/Header';
 import Board from '../../components/Board';
 import api from '../../services/api';
@@ -8,7 +7,6 @@ import ModalEditPayment from '../../components/ModalMakeUpdates';
 import ModalTransactionToPayment from '../../components/ModalMakeTransactions';
 import Payment from '../../components/Payments';
 import { PaymentContainer } from './styles';
-import { useAuth } from '../../context/AuthContext';
 import List from '../../components/List';
 
 interface IPayment {
@@ -35,8 +33,6 @@ const Dashboard: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
-
-  const { signOut } = useAuth();
 
   const [editingPayment, setEditingPayment] = useState<IPayment>(
     {} as IPayment,
@@ -166,18 +162,52 @@ const Dashboard: React.FC = () => {
         handleCreateTransaction={handleCreateTransaction}
       />
       <Board>
-        <List>
+        <List title="Aguardando pagamento">
           <PaymentContainer data-testid="payments-list">
             {payments &&
-              payments.map((payment) => (
-                <Payment
-                  key={payment.id}
-                  payment={payment}
-                  handleTransactionPayment={handleTransactionPayment}
-                  handleDelete={handleDeletePayment}
-                  handleEditPayment={handleEditPayment}
-                />
-              ))}
+              payments
+                .filter((payment) => payment.status === 'Aguardando pagamento')
+                .map((payment) => (
+                  <Payment
+                    key={payment.id}
+                    payment={payment}
+                    handleTransactionPayment={handleTransactionPayment}
+                    handleDelete={handleDeletePayment}
+                    handleEditPayment={handleEditPayment}
+                  />
+                ))}
+          </PaymentContainer>
+        </List>
+        <List title="Pagamento efetuado">
+          <PaymentContainer data-testid="payments-list">
+            {payments &&
+              payments
+                .filter((payment) => payment.status === 'Pagamento efetuado')
+                .map((payment) => (
+                  <Payment
+                    key={payment.id}
+                    payment={payment}
+                    handleTransactionPayment={handleTransactionPayment}
+                    handleDelete={handleDeletePayment}
+                    handleEditPayment={handleEditPayment}
+                  />
+                ))}
+          </PaymentContainer>
+        </List>
+        <List title="Recebido">
+          <PaymentContainer data-testid="payments-list">
+            {payments &&
+              payments
+                .filter((payment) => payment.status === 'Recebido')
+                .map((payment) => (
+                  <Payment
+                    key={payment.id}
+                    payment={payment}
+                    handleTransactionPayment={handleTransactionPayment}
+                    handleDelete={handleDeletePayment}
+                    handleEditPayment={handleEditPayment}
+                  />
+                ))}
           </PaymentContainer>
         </List>
       </Board>

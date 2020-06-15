@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { shade } from 'polished';
 import signUpImg from '../../assets/Cadastro.svg';

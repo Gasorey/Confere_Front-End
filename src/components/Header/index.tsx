@@ -1,7 +1,6 @@
 import React from 'react';
-
-import {} from 'polished';
 import { FiPower } from 'react-icons/fi';
+import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { Container } from './styles';
 import { useAuth } from '../../context/AuthContext';
 
@@ -27,6 +26,7 @@ const Header: React.FC<IHeaderProps> = ({ openModal }) => {
                 openModal();
               }}
             >
+              <RiMoneyDollarCircleLine size={30} />
               <div className="text">Novo Pagamento</div>
             </button>
 

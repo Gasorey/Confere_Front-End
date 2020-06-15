@@ -1,7 +1,6 @@
 import React from 'react';
 import { FiEdit2, FiTrash2, FiCreditCard } from 'react-icons/fi';
 import { format, parseISO } from 'date-fns';
-// eslint-disable-next-line import/no-duplicates
 import { ptBR } from 'date-fns/locale';
 
 import { Container } from './styles';

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import List from '../List';
-import api from '../../services/api';
+import React from 'react';
 
 import { Container } from './styles';
 
@@ -14,23 +12,6 @@ interface IPayment {
 }
 
 const Board: React.FC = ({ children }) => {
-  const [payments, setPayments] = useState<IPayment[]>([]);
-
-  async function loadPaymentsType(): Promise<void> {
-    await api.get('/payments').then((response) => {
-      const userPayments = response.data;
-
-      setPayments(userPayments);
-    });
-  }
-
-  return (
-    <Container>
-      {payments.map((payment) => (
-        <List key={payment.id} data={payment} />
-      ))}
-      {children}
-    </Container>
-  );
+  return <Container>{children}</Container>;
 };
 export default Board;

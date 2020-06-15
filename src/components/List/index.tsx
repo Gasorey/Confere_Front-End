@@ -1,6 +1,5 @@
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
 import { Container } from './styles';
-import Payments from '../Payments';
 
 interface IPayment {
   id: string;
@@ -10,17 +9,15 @@ interface IPayment {
   created_at: Date;
   updated_at: Date;
 }
-
-interface IListProps extends HTMLAttributes<HTMLElement> {
-  name?: string;
-  data?: IPayment;
+interface IListProps {
+  title: string;
 }
 
-const List: React.FC<IListProps> = ({ data, children }) => {
+const List: React.FC<IListProps> = ({ title, children }) => {
   return (
     <Container>
       <header>
-        <h2>{data?.status}</h2>
+        <h2>{title}</h2>
       </header>
       <ul>{children}</ul>
     </Container>

@@ -21,7 +21,6 @@ interface AuthContextData {
   user: User;
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
-  updateUser(user: User): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -38,17 +37,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
     return {} as AuthState;
   });
-
-  const updateUser = useCallback(
-    (user: User) => {
-      localStorage.setItem('@Confere:user', JSON.stringify(user));
-      setData({
-        token: data.token,
-        user,
-      });
-    },
-    [setData, data.token],
-  );
 
   const signIn = useCallback(async ({ email, password }) => {
     const response = await api.post('login', {
@@ -67,16 +55,14 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   const signOut = useCallback(() => {
-    const token = localStorage.removeItem('@Confere:token');
-    const user = localStorage.removeItem('@Confere:user');
+    localStorage.removeItem('@Confere:token');
+    localStorage.removeItem('@Confere:user');
 
     setData({} as AuthState);
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ user: data.user, signIn, signOut, updateUser }}
-    >
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
