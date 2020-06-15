@@ -5,7 +5,7 @@ import { FiPlusSquare } from 'react-icons/fi';
 import { Container } from './styles';
 
 interface IHeaderProps {
-  openModal?: () => void;
+  openModal: () => void;
 }
 
 const Header: React.FC<IHeaderProps> = ({ openModal }) => (
@@ -15,9 +15,9 @@ const Header: React.FC<IHeaderProps> = ({ openModal }) => (
         <div>
           <button
             type="button"
-            // onClick={() => {
-            //   openModal();
-            // }}
+            onClick={() => {
+              openModal();
+            }}
           >
             <div className="text">Novo Pagamento</div>
             <div className="icon">
