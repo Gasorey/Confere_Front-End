@@ -6,8 +6,6 @@ export const Container = styled.div`
   padding: 30px 0;
   header {
     width: 100%;
-    margin: 0 auto;
-    /* padding: 0 20px 150px; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -29,7 +27,7 @@ export const Container = styled.div`
     nav {
       margin-left: 60%;
       div {
-        max-width: 100%;
+        max-width: 80%;
         display: flex;
         .power-button {
           background: transparent;

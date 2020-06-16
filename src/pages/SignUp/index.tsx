@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import logoImg from '../../assets/ConfereLogo.svg';
 import Button from '../../components/Button';
@@ -19,6 +19,8 @@ interface SignUpFormData {
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+
+  const history = useHistory();
 
   const handleSubmit = useCallback(async (data: SignUpFormData) => {
     try {
@@ -37,6 +39,7 @@ const SignUp: React.FC = () => {
       });
 
       await api.post('/users', data);
+      history.push('/');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);

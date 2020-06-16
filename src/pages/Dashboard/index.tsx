@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from '../../components/Header';
 import Board from '../../components/Board';
 import api from '../../services/api';
 import ModalAddPayment from '../../components/ModalAddPayments';
 import ModalEditPayment from '../../components/ModalMakeUpdates';
 import ModalTransactionToPayment from '../../components/ModalMakeTransactions';
+import ModalShowInfo from '../../components/ModalShowInfo';
 import Payment from '../../components/Payments';
 import { PaymentContainer } from './styles';
 import List from '../../components/List';
@@ -16,6 +17,23 @@ interface IPayment {
   user_id: string;
   created_at: Date;
   updated_at: Date;
+}
+
+interface ITransaction {
+  id: string;
+  value: number;
+  description: string;
+  type: string;
+  installment: number;
+  payment_id: string;
+  Card: {
+    id: string;
+    number: string;
+    expiry: Date;
+    cvv: string;
+    holder: string;
+    transaction_id: string;
+  };
 }
 
 interface ICreateTransactions {
@@ -33,6 +51,10 @@ const Dashboard: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
+  const [showInfoModalOpen, setShowInfoModalOpen] = useState(false);
+  const [showTransaction, setShowTransaction] = useState<ITransaction>(
+    {} as ITransaction,
+  );
 
   const [editingPayment, setEditingPayment] = useState<IPayment>(
     {} as IPayment,
@@ -41,6 +63,9 @@ const Dashboard: React.FC = () => {
     {} as IPayment,
   );
   const [payments, setPayments] = useState<IPayment[]>([]);
+  const [paymentToShowTransaction, setPaymentToShowTransaction] = useState<
+    IPayment
+  >({} as IPayment);
 
   useEffect(() => {
     async function loadPayments(): Promise<void> {
@@ -52,6 +77,25 @@ const Dashboard: React.FC = () => {
     }
     loadPayments();
   }, []);
+
+  // useEffect(() => {
+  //   async function loadTransaction(): Promise<void> {
+  //     const { id } = paymentToShowTransaction;
+  //     await api.get(`/transaction/${id}`).then((response) => {
+  //       const myTransaction = response.data;
+
+  //       setShowTransaction(myTransaction);
+  //       console.log(showTransaction);
+  //     });
+  //   }
+  //   loadTransaction();
+  // }, []);
+
+ export const transactionInfo = useCallback(() => {
+  async function loadTransaction(): Promise<void> {
+    const { id } = paymentToShowTransaction;
+    await api.get(`/transaction/${id}`)
+ }, []);
 
   async function handleAddPayment(
     payment: Omit<IPayment, 'id' | 'user_id' | 'created_at' | 'updated_at'>,
@@ -78,6 +122,13 @@ const Dashboard: React.FC = () => {
     );
 
     setPayments(newPayment);
+  }
+
+  async function handleIndexTransaction(teste: string): Promise<void> {
+    const { id } = paymentToShowTransaction;
+    await api.get(`/transaction/${id}`).then((response) => {
+      const transaction = response.data;
+    });
   }
 
   async function handleCreateTransaction(
@@ -125,6 +176,9 @@ const Dashboard: React.FC = () => {
   function toggleModal(): void {
     setModalOpen(!modalOpen);
   }
+  function toggleShowInfoModal(): void {
+    setShowInfoModalOpen(!showInfoModalOpen);
+  }
 
   function toggleEditModal(): void {
     setEditModalOpen(!editModalOpen);
@@ -133,8 +187,15 @@ const Dashboard: React.FC = () => {
     setTransactionModalOpen(!transactionModalOpen);
   }
 
+  function handlePaymentToShowTransaction(payment: IPayment): void {
+    setPaymentToShowTransaction(payment);
+
+    toggleShowInfoModal();
+  }
+
   function handleTransactionPayment(payment: IPayment): void {
     setTransactionPayment(payment);
+    handleIndexTransaction(payment.id);
     toggleTransactionModal();
   }
 
@@ -161,6 +222,11 @@ const Dashboard: React.FC = () => {
         setIsOpen={toggleTransactionModal}
         handleCreateTransaction={handleCreateTransaction}
       />
+      <ModalShowInfo
+        isOpen={showInfoModalOpen}
+        setIsOpen={toggleShowInfoModal}
+        handleIndexTransaction={handleIndexTransaction}
+      />
       <Board>
         <List title="Aguardando pagamento">
           <PaymentContainer data-testid="payments-list">
@@ -174,6 +240,9 @@ const Dashboard: React.FC = () => {
                     handleTransactionPayment={handleTransactionPayment}
                     handleDelete={handleDeletePayment}
                     handleEditPayment={handleEditPayment}
+                    handlePaymentToShowTransaction={
+                      handlePaymentToShowTransaction
+                    }
                   />
                 ))}
           </PaymentContainer>
@@ -190,6 +259,9 @@ const Dashboard: React.FC = () => {
                     handleTransactionPayment={handleTransactionPayment}
                     handleDelete={handleDeletePayment}
                     handleEditPayment={handleEditPayment}
+                    handlePaymentToShowTransaction={
+                      handlePaymentToShowTransaction
+                    }
                   />
                 ))}
           </PaymentContainer>
@@ -206,6 +278,9 @@ const Dashboard: React.FC = () => {
                     handleTransactionPayment={handleTransactionPayment}
                     handleDelete={handleDeletePayment}
                     handleEditPayment={handleEditPayment}
+                    handlePaymentToShowTransaction={
+                      handlePaymentToShowTransaction
+                    }
                   />
                 ))}
           </PaymentContainer>

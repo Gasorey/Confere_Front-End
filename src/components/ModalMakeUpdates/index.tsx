@@ -46,8 +46,8 @@ const ModalEditPayment: React.FC<IModalProps> = ({
         <h1>Atualize o status do seu pagamento</h1>
         <h2>As opções são:</h2>
         <ul>
-          <li>Aguardando Pagamento</li>
-          <li>Pagamento Efetuado</li>
+          <li>Aguardando pagamento</li>
+          <li>Pagamento efetuado</li>
           <li>Recebido</li>
         </ul>
         <Input name="status" placeholder="Qual o status do pagamento" />
