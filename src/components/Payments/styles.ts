@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {} from 'react-dnd';
 
-export const Container = styled.div`
+interface IContainerProps {
+  isDragging: boolean;
+}
+
+export const Container = styled.div<IContainerProps>`
   background: #f0f0f5;
   border-radius: 8px;
   position: relative;
@@ -64,4 +68,17 @@ export const Container = styled.div`
       }
     }
   }
+  ${(props) =>
+    props.isDragging &&
+    css`
+      border: 2px dashed rgba(0, 0, 0, 0.2);
+      padding-top: 31px;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      cursos: grabbing;
+
+      p, h1, section, svg, header {
+        opacity: 0;
+    `}
 `;

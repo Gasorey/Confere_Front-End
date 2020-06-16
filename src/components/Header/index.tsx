@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiPower } from 'react-icons/fi';
+import { FiPower, FiUser } from 'react-icons/fi';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { Container } from './styles';
 import { useAuth } from '../../context/AuthContext';
@@ -17,6 +17,9 @@ const Header: React.FC<IHeaderProps> = ({ openModal }) => {
         <div className="login">
           <h2>Seja bem vindo: </h2>
           <h1>{user.name}</h1>
+          <button type="button">
+            <FiUser size={24} />
+          </button>
         </div>
         <nav>
           <div>

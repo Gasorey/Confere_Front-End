@@ -1,8 +1,9 @@
-import React, { useRef, createContext } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
-import { FiEdit2, FiTrash2, FiCreditCard, FiInfo } from 'react-icons/fi';
+import React, { createContext } from 'react';
+import { useDrag, DragObjectWithType } from 'react-dnd';
+import { FiEdit2, FiTrash2, FiCreditCard } from 'react-icons/fi';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { items } from '../../utils/DnDItem';
 
 import { Container } from './styles';
 
@@ -47,8 +48,20 @@ const Payment: React.FC<IProps> = ({
     },
   );
 
+  const [{ isDragging }, drag] = useDrag({
+    item: {
+      id: payment.id,
+      status: payment.status,
+      description: payment.description,
+      type: items.PAYMENT,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
   return (
-    <Container>
+    <Container ref={drag} isDragging={isDragging}>
       <section className="body">
         <h1>Descrição:</h1>
         <p>{payment.description}</p>

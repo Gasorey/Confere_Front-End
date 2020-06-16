@@ -1,6 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+interface IContainerProps {
+  isOver: boolean;
+}
+export const Container = styled.div<IContainerProps>`
   padding: 0 15px;
   height: 100%;
   flex: 0 0 25%;
@@ -10,4 +13,17 @@ export const Container = styled.div`
   h2 {
     color: black;
   }
+  ${(props) =>
+    props.isOver &&
+    css`
+      border: 2px dashed rgba(0, 0, 0, 0.2);
+      padding-top: 31px;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      cursos: grabbing;
+
+       h2, section, svg, header {
+        opacity: 0;
+    `}
 `;
