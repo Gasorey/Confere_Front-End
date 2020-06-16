@@ -25,29 +25,31 @@ export const Container = styled.div`
     }
 
     nav {
-      margin-left: 60%;
+      width: 20%;
+      /* background: black; */
+
       div {
-        max-width: 80%;
+        max-width: 100%;
         display: flex;
-        .power-button {
-          background: transparent;
-        }
-        button {
+
+        button,
+        a {
           font-weight: 600;
           border-radius: 8px;
           border: 0;
           background: transparent;
           color: #fff;
-          margin: 16px;
+          margin: 8px;
           font-size: 24px;
 
           display: flex;
           flex-direction: row;
           align-items: center;
+          justify-content: space-between;
           transition: background-color 0.2s;
 
           .text {
-            padding: 16px 24px;
+            padding: 0px 0px;
           }
 
           &:hover {
