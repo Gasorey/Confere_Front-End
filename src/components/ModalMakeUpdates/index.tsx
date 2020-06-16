@@ -4,6 +4,7 @@ import { FiCheckCircle } from 'react-icons/fi';
 import { Form } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
+import Button from '../Button';
 
 interface IPayment {
   id: string;
@@ -51,7 +52,7 @@ const ModalEditPayment: React.FC<IModalProps> = ({
           <li>Recebido</li>
         </ul>
         <Input name="status" placeholder="Qual o status do pagamento" />
-        <button type="submit" data-testid="add-payment">
+        <button type="submit">
           <p className="text">Atualizar pagamento</p>
           <div className="icon">
             <FiCheckCircle size={20} />

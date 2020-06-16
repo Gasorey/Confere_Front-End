@@ -12,6 +12,12 @@ export const Form = styled(Unform)`
     line-height: 36px;
     margin-bottom: 40px;
   }
+  ul {
+    margin-bottom: 16px;
+    li {
+      margin: 16px;
+    }
+  }
   button {
     margin-top: 48px;
     align-self: flex-end;

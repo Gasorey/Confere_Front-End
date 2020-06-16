@@ -46,6 +46,12 @@ const ModalAddPayment: React.FC<IModalProps> = ({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Form ref={formRef} onSubmit={handleSubmit}>
         <h1>Novo Pagamento</h1>
+        <h2>As opções de status são:</h2>
+        <ul>
+          <li>Aguardando pagamento</li>
+          <li>Pagamento efetuado</li>
+          <li>Recebido</li>
+        </ul>
         <Input name="description" placeholder="Descrição do seu pagamento" />
         <Input name="status" placeholder="Qual o status do pagamento" />
         <button type="submit" data-testid="add-payment">

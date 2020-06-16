@@ -21,10 +21,9 @@ interface IPayment {
 
 interface IProps {
   payment: IPayment;
-  handleDelete: (id: string) => {};
+  handleDelete: (id: string) => void;
   handleEditPayment: (payment: IPayment) => void;
   handleTransactionPayment: (payment: IPayment) => void;
-  handlePaymentToShowTransaction: (payment: IPayment) => void;
 }
 
 const Payment: React.FC<IProps> = ({
@@ -32,16 +31,12 @@ const Payment: React.FC<IProps> = ({
   handleDelete,
   handleEditPayment,
   handleTransactionPayment,
-  handlePaymentToShowTransaction,
 }: IProps) => {
   function setEditingPayment(): void {
     handleEditPayment(payment);
   }
   function setTransactionPayment(): void {
     handleTransactionPayment(payment);
-  }
-  function setPaymentToShowTransaction(): void {
-    handlePaymentToShowTransaction(payment);
   }
 
   const formatedDate = format(
@@ -86,19 +81,9 @@ const Payment: React.FC<IProps> = ({
           >
             <FiTrash2 size={20} />
           </button>
-          <button
-            type="button"
-            className="icon"
-            onClick={() => {
-              setPaymentToShowTransaction();
-            }}
-          >
-            <FiInfo size={20} />
-          </button>
         </div>
       </section>
     </Container>
-    // </PaymentContext.Provider>
   );
 };
 
