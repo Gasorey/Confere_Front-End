@@ -14,11 +14,6 @@ interface IPayment {
   updated_at: Date;
 }
 
-interface ICreatePayment {
-  description: string;
-  status: string;
-}
-
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;

@@ -1,15 +1,15 @@
 import React from 'react';
 import { FiPower, FiUser } from 'react-icons/fi';
 import { RiMoneyDollarCircleLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
 import { Container } from './styles';
 import { useAuth } from '../../context/AuthContext';
 
 interface IHeaderProps {
   openModal: () => void | undefined;
+  openUserModal: () => void | undefined;
 }
 
-const Header: React.FC<IHeaderProps> = ({ openModal }) => {
+const Header: React.FC<IHeaderProps> = ({ openModal, openUserModal }) => {
   const { user, signOut } = useAuth();
 
   return (
@@ -30,11 +30,16 @@ const Header: React.FC<IHeaderProps> = ({ openModal }) => {
               <RiMoneyDollarCircleLine size={30} />
               <div className="text">Novo Pagamento</div>
             </button>
-            <Link to="/profile">
-              <button type="button">
-                <FiUser size={24} />
-              </button>
-            </Link>
+
+            <button
+              type="button"
+              onClick={() => {
+                openUserModal();
+              }}
+            >
+              <FiUser size={24} />
+            </button>
+
             <button
               type="button"
               onClick={() => signOut()}

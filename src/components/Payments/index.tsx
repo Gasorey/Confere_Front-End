@@ -1,15 +1,11 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { useDrag } from 'react-dnd';
-import { FiEdit2, FiTrash2, FiCreditCard } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiCreditCard, FiInfo } from 'react-icons/fi';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { items } from '../../utils/DnDItem';
 
 import { Container } from './styles';
-
-export const PaymentContext = createContext({
-  paymentChange: null,
-});
 
 interface IPayment {
   id: string;
@@ -25,6 +21,7 @@ interface IProps {
   handleDelete: (id: string) => void;
   handleEditPayment: (payment: IPayment) => void;
   handleTransactionPayment: (payment: IPayment) => void;
+  getPayment: (payment: IPayment) => void;
 }
 
 const Payment: React.FC<IProps> = ({
@@ -32,12 +29,17 @@ const Payment: React.FC<IProps> = ({
   handleDelete,
   handleEditPayment,
   handleTransactionPayment,
+  getPayment,
 }: IProps) => {
   function setEditingPayment(): void {
     handleEditPayment(payment);
   }
   function setTransactionPayment(): void {
     handleTransactionPayment(payment);
+  }
+
+  function getPaymentToShowTransaction(): void {
+    getPayment(payment);
   }
 
   const formatedDate = format(
@@ -86,7 +88,13 @@ const Payment: React.FC<IProps> = ({
           >
             <FiEdit2 size={20} />
           </button>
-
+          <button
+            type="button"
+            className="icon"
+            onClick={() => getPaymentToShowTransaction()}
+          >
+            <FiInfo size={20} />
+          </button>
           <button
             type="button"
             className="icon"

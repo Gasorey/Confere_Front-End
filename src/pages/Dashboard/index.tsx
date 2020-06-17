@@ -6,6 +6,8 @@ import api from '../../services/api';
 import ModalAddPayment from '../../components/ModalAddPayments';
 import ModalEditPayment from '../../components/ModalMakeUpdates';
 import ModalTransactionToPayment from '../../components/ModalMakeTransactions';
+import ModalUserInfo from '../../components/ModalUserInfo';
+import ModalShowTransaction from '../../components/ModalShowTransaction';
 import Payment from '../../components/Payments';
 import { PaymentContainer } from './styles';
 import List from '../../components/List';
@@ -20,6 +22,14 @@ interface IPayment {
   updated_at: Date;
 }
 
+interface IReceived {
+  id: string;
+  status: string;
+  transaction_id: string;
+  value: number;
+  received_date: Date;
+}
+
 interface ITransaction {
   id: string;
   value: number;
@@ -27,7 +37,7 @@ interface ITransaction {
   type: string;
   installment: number;
   payment_id: string;
-  Card: {
+  card: {
     id: string;
     number: string;
     expiry: Date;
@@ -35,6 +45,35 @@ interface ITransaction {
     holder: string;
     transaction_id: string;
   };
+}
+
+interface ICard {
+  card: {
+    id: string;
+    number: string;
+    expiry: Date;
+    cvv: string;
+    holder: string;
+    transaction_id: string;
+  };
+}
+
+interface IUserTransaction {
+  transaction: ITransaction;
+  received: IReceived;
+  card: ICard;
+}
+
+interface IUserInfo {
+  payment: {
+    id: string;
+    description: string;
+    status: string;
+    user_id: string;
+    created_at: Date;
+    updated_at: Date;
+  };
+  transaction: IUserTransaction;
 }
 
 interface ICreateTransactions {
@@ -48,24 +87,34 @@ interface ICreateTransactions {
   holder: string;
 }
 
-interface IResponseSocket {
-  data: string;
-}
-
 const Dashboard: React.FC = () => {
-  console.log(useState('gabriel'));
-
   const { user } = useAuth();
 
   const [modalOpen, setModalOpen] = useState(false);
+
+  const [userModalOpen, setUserModalOpen] = useState(false);
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
 
+  const [openTransactionInfo, setOpenTransactionInfo] = useState(false);
+
   const [editingPayment, setEditingPayment] = useState<IPayment>(
     {} as IPayment,
   );
+
+  const [transactionToModal, setTransactionToModal] = useState<ITransaction>(
+    {} as ITransaction,
+  );
+
+  const [userInfo, setUserInfo] = useState<IUserInfo>({} as IUserInfo);
+
+  const [
+    showTransactionFromThisPayment,
+    setShowTransactionFromThisPayment,
+  ] = useState<IPayment>({} as IPayment);
+
   const [transactionPayment, setTransactionPayment] = useState<IPayment>(
     {} as IPayment,
   );
@@ -105,6 +154,32 @@ const Dashboard: React.FC = () => {
       });
       setPayments([...payments, newPayment.data]);
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  }
+
+  async function getUserInfo(): Promise<void> {
+    try {
+      await api.get('/payment').then((response) => {
+        const userInformation = response.data;
+
+        setUserInfo(userInformation);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getTransaction(payment: IPayment): Promise<void> {
+    try {
+      await api.get(`/transaction/${payment.id}`).then((response) => {
+        const transactions = response.data;
+
+        setTransactionToModal(transactions);
+      });
+    } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     }
   }
@@ -169,11 +244,19 @@ const Dashboard: React.FC = () => {
     setModalOpen(!modalOpen);
   }
 
+  function toggleUserModal(): void {
+    getUserInfo();
+    setUserModalOpen(!userModalOpen);
+  }
+
   function toggleEditModal(): void {
     setEditModalOpen(!editModalOpen);
   }
   function toggleTransactionModal(): void {
     setTransactionModalOpen(!transactionModalOpen);
+  }
+  function toggleShowTransactionModal(): void {
+    setOpenTransactionInfo(!openTransactionInfo);
   }
 
   function handleTransactionPayment(payment: IPayment): void {
@@ -186,13 +269,19 @@ const Dashboard: React.FC = () => {
     toggleEditModal();
   }
 
+  function putPaymentIntoState(payment: IPayment): void {
+    setShowTransactionFromThisPayment(payment);
+    getTransaction(payment);
+    toggleShowTransactionModal();
+  }
+
   function alterPayments(paymentsAltered: IPayment[]): void {
     setPayments(paymentsAltered);
   }
 
   return (
     <>
-      <Header openModal={toggleModal} />
+      <Header openModal={toggleModal} openUserModal={toggleUserModal} />
       <ModalAddPayment
         isOpen={modalOpen}
         setIsOpen={toggleModal}
@@ -208,13 +297,24 @@ const Dashboard: React.FC = () => {
         setIsOpen={toggleTransactionModal}
         handleCreateTransaction={handleCreateTransaction}
       />
+      <ModalShowTransaction
+        isOpen={openTransactionInfo}
+        setIsOpen={toggleShowTransactionModal}
+        bringPaymentToModal={showTransactionFromThisPayment}
+        bringTransactionToModal={transactionToModal}
+      />
+      <ModalUserInfo
+        isOpen={userModalOpen}
+        setIsOpen={toggleUserModal}
+        bringInfo={userInfo}
+      />
       <Board>
         <List
           title="Aguardando pagamento"
           payments={payments}
           setPayments={setPayments}
         >
-          <PaymentContainer data-testid="payments-list">
+          <PaymentContainer>
             {payments &&
               payments
                 .filter((payment) => payment.status === 'Aguardando pagamento')
@@ -225,6 +325,7 @@ const Dashboard: React.FC = () => {
                     handleTransactionPayment={handleTransactionPayment}
                     handleDelete={handleDeletePayment}
                     handleEditPayment={handleEditPayment}
+                    getPayment={putPaymentIntoState}
                   />
                 ))}
           </PaymentContainer>
@@ -234,7 +335,7 @@ const Dashboard: React.FC = () => {
           payments={payments}
           setPayments={alterPayments}
         >
-          <PaymentContainer data-testid="payments-list">
+          <PaymentContainer>
             {payments &&
               payments
                 .filter((payment) => payment.status === 'Pagamento efetuado')
@@ -245,6 +346,7 @@ const Dashboard: React.FC = () => {
                     handleTransactionPayment={handleTransactionPayment}
                     handleDelete={handleDeletePayment}
                     handleEditPayment={handleEditPayment}
+                    getPayment={putPaymentIntoState}
                   />
                 ))}
           </PaymentContainer>
@@ -261,6 +363,7 @@ const Dashboard: React.FC = () => {
                     handleTransactionPayment={handleTransactionPayment}
                     handleDelete={handleDeletePayment}
                     handleEditPayment={handleEditPayment}
+                    getPayment={putPaymentIntoState}
                   />
                 ))}
           </PaymentContainer>
