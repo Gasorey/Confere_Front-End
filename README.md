@@ -1,5 +1,13 @@
 # Confere Front-End
 
+
+
+![Confere](Confere.gif)
+
+
+
+
+
 <h2>Projeto desenvolvido como teste técnico da empresa Confere Cartões</h2>
 
 <h2>Como rodar o projeto</h2>
