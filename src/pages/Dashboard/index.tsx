@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import socketio from 'socket.io-client';
 import Header from '../../components/Header';
 import Board from '../../components/Board';
 import api from '../../services/api';
@@ -8,6 +9,7 @@ import ModalTransactionToPayment from '../../components/ModalMakeTransactions';
 import Payment from '../../components/Payments';
 import { PaymentContainer } from './styles';
 import List from '../../components/List';
+import { useAuth } from '../../context/AuthContext';
 
 interface IPayment {
   id: string;
@@ -46,9 +48,19 @@ interface ICreateTransactions {
   holder: string;
 }
 
+interface IResponseSocket {
+  data: string;
+}
+
 const Dashboard: React.FC = () => {
+  console.log(useState('gabriel'));
+
+  const { user } = useAuth();
+
   const [modalOpen, setModalOpen] = useState(false);
+
   const [editModalOpen, setEditModalOpen] = useState(false);
+
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
 
   const [editingPayment, setEditingPayment] = useState<IPayment>(
@@ -58,6 +70,20 @@ const Dashboard: React.FC = () => {
     {} as IPayment,
   );
   const [payments, setPayments] = useState<IPayment[]>([]);
+
+  const socket = useMemo(
+    () =>
+      socketio('http://localhost:3333/', {
+        query: { user_id: user.id },
+      }),
+    [user.id],
+  );
+
+  useEffect(() => {
+    socket.on('payment.create', (data: IPayment) => {
+      setPayments([...payments, data]);
+    });
+  }, [payments, socket]);
 
   useEffect(() => {
     async function loadPayments(): Promise<void> {
@@ -160,6 +186,10 @@ const Dashboard: React.FC = () => {
     toggleEditModal();
   }
 
+  function alterPayments(paymentsAltered: IPayment[]): void {
+    setPayments(paymentsAltered);
+  }
+
   return (
     <>
       <Header openModal={toggleModal} />
@@ -179,7 +209,11 @@ const Dashboard: React.FC = () => {
         handleCreateTransaction={handleCreateTransaction}
       />
       <Board>
-        <List title="Aguardando pagamento">
+        <List
+          title="Aguardando pagamento"
+          payments={payments}
+          setPayments={setPayments}
+        >
           <PaymentContainer data-testid="payments-list">
             {payments &&
               payments
@@ -195,7 +229,11 @@ const Dashboard: React.FC = () => {
                 ))}
           </PaymentContainer>
         </List>
-        <List title="Pagamento efetuado">
+        <List
+          title="Pagamento efetuado"
+          payments={payments}
+          setPayments={alterPayments}
+        >
           <PaymentContainer data-testid="payments-list">
             {payments &&
               payments
@@ -211,7 +249,7 @@ const Dashboard: React.FC = () => {
                 ))}
           </PaymentContainer>
         </List>
-        <List title="Recebido">
+        <List title="Recebido" payments={payments} setPayments={alterPayments}>
           <PaymentContainer data-testid="payments-list">
             {payments &&
               payments

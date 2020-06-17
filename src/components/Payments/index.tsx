@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import { useDrag, DragObjectWithType } from 'react-dnd';
+import { useDrag } from 'react-dnd';
 import { FiEdit2, FiTrash2, FiCreditCard } from 'react-icons/fi';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';

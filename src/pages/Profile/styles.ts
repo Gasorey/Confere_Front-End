@@ -12,8 +12,10 @@ export const Header = styled.header`
 
 export const HeaderContent = styled.div`
   width: 100%;
-  margin: 0 50px;
+  padding: 0 50px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   nav {
     button {

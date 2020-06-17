@@ -4,7 +4,6 @@ import { FiCheckCircle } from 'react-icons/fi';
 import { Form } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
-import Button from '../Button';
 
 interface IPayment {
   id: string;
