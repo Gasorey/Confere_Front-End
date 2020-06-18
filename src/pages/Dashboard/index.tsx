@@ -86,6 +86,35 @@ interface ICreateTransactions {
   cvv: string;
   holder: string;
 }
+interface IBringInfo {
+  create_at: Date;
+  description: string;
+  id: string;
+  status: string;
+  transaction: {
+    card: {
+      id: string;
+      cvv: string;
+      number: string;
+      holder: string;
+      expiry: Date;
+    };
+    received: {
+      value: number;
+      received_date: Date;
+      transaction_id: string;
+      status: string;
+    };
+    id: string;
+    value: number;
+    description: string;
+    type: string;
+    installment: number;
+    payment_id: string;
+  };
+  updated_at: string;
+  user_id: string;
+}
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -108,7 +137,7 @@ const Dashboard: React.FC = () => {
     {} as ITransaction,
   );
 
-  const [userInfo, setUserInfo] = useState<IUserInfo>({} as IUserInfo);
+  const [userInfo, setUserInfo] = useState<IBringInfo[]>([]);
 
   const [
     showTransactionFromThisPayment,

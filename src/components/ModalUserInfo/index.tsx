@@ -1,67 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from '../Modal';
 import { Container } from './styles';
 
-interface IPayment {
-  id: string;
+interface IBringInfo {
+  create_at: Date;
   description: string;
+  id: string;
   status: string;
+  transaction: {
+    card: {
+      id: string;
+      cvv: string;
+      number: string;
+      holder: string;
+      expiry: Date;
+    };
+    received: {
+      value: number;
+      received_date: Date;
+      transaction_id: string;
+      status: string;
+    };
+    id: string;
+    value: number;
+    description: string;
+    type: string;
+    installment: number;
+    payment_id: string;
+  };
+  updated_at: string;
   user_id: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-interface IReceived {
-  id: string;
-  status: string;
-  transaction_id: string;
-  value: number;
-  received_date: Date;
-}
-
-interface ITransaction {
-  id: string;
-  value: number;
-  description: string;
-  type: string;
-  installment: number;
-  payment_id: string;
-  card: {
-    id: string;
-    number: string;
-    expiry: Date;
-    cvv: string;
-    holder: string;
-    transaction_id: string;
-  };
-}
-
-interface ICard {
-  card: {
-    id: string;
-    number: string;
-    expiry: Date;
-    cvv: string;
-    holder: string;
-    transaction_id: string;
-  };
-}
-
-interface IUserTransaction {
-  transaction: ITransaction;
-  received: IReceived;
-  card: ICard;
-}
-
-interface IUserInfo {
-  payment: IPayment;
-  transaction: IUserTransaction;
 }
 
 interface IModalProps {
   isOpen: boolean;
   setIsOpen: () => void;
-  bringInfo: IUserInfo;
+  bringInfo: IBringInfo[];
+}
+
+interface IReceived {
+  value: number;
+  received_date: Date;
+  transaction_id: string;
+  status: string;
 }
 
 const ModalUserInfo: React.FC<IModalProps> = ({
@@ -69,16 +50,27 @@ const ModalUserInfo: React.FC<IModalProps> = ({
   setIsOpen,
   bringInfo,
 }) => {
-  console.log(bringInfo);
+  if (bringInfo) {
+    return (
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Container>
+          <h2>Feature em desenvolvimento</h2>
+          <h2>
+            Será utilizada para aprensentar o valor que o usuario tem a receber
+            e quanto já recebeu
+          </h2>
+
+          <h2>A estrutura que será apresentada está no seu console</h2>
+        </Container>
+      </Modal>
+    );
+  }
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Container>
-        <h2>Feature em desenvolvimento</h2>
         <h2>
-          Será utilizada para aprensentar o valor que o usuario tem a receber e
-          quanto já recebeu
+          Desculpe mas não existe nenhum pagamento lançado para esse usuário
         </h2>
-        <h2>A estrutura que será apresentada está no seu console</h2>
       </Container>
     </Modal>
   );
